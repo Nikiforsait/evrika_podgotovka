@@ -1,0 +1,12 @@
+node_modules
+dist
+dev-dist
+.git
+server/data
+content/generated
+public/content
+.claude
+docs
+*.zip
+.env
+.env.local

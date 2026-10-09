@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+
+/* Design tokens — keep in sync with src/design-system/tokens.ts */
+@theme {
+  --color-bg: #1a0b2e;
+  --color-bg-raised: #2d1b4e;
+  --color-surface: #26143f;
+  --color-surface-high: #331d57;
+  --color-line: rgb(168 85 247 / 0.28);
+  --color-violet: #a855f7;
+  --color-magenta: #d946ef;
+  --color-pink: #ec4899;
+  --color-lime: #a3e635;
+  --color-yellow: #facc15;
+  --color-cyan: #22d3ee;
+  --color-orange: #fb923c;
+  --color-ink: #f5f0ff;
+  --color-muted: #b9acd9;
+  --color-faint: #8e7fb3;
+
+  --font-display: 'Unbounded Variable', 'Onest Variable', system-ui, sans-serif;
+  --font-sans: 'Onest Variable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  --radius-input: 16px;
+  --radius-inner: 20px;
+  --radius-card: 24px;
+
+  --shadow-glow: 0 0 0 1px rgb(168 85 247 / 0.28), 0 12px 36px -12px rgb(168 85 247 / 0.45);
+  --shadow-glow-strong: 0 0 0 1px rgb(217 70 239 / 0.6), 0 0 32px -4px rgb(217 70 239 / 0.55);
+  --shadow-glow-lime: 0 0 0 1px rgb(163 230 53 / 0.5), 0 0 28px -6px rgb(163 230 53 / 0.5);
+  --shadow-inner-glow: inset 0 1px 0 rgb(255 255 255 / 0.06), inset 0 0 40px -12px rgb(168 85 247 / 0.35);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    min-height: 100dvh;
+    margin: 0;
+    background: linear-gradient(180deg, var(--color-bg-raised) 0%, var(--color-bg) 45%, #0e0619 100%) fixed;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-magenta);
+    outline-offset: 3px;
+    border-radius: 12px;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@utility card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-glow);
+}
+
+/* CTA gradient uses deeper pink/magenta so white button text meets WCAG AA (≥ 4.5:1). */
+@utility bg-cta {
+  background-image: linear-gradient(135deg, #db2777 0%, #c026d3 100%);
+}
+
+@utility bg-selected {
+  background-image: linear-gradient(135deg, var(--color-violet) 0%, var(--color-magenta) 100%);
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #111;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    background: #fff;
+  }
+}

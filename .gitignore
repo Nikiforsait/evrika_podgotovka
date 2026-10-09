@@ -1,0 +1,10 @@
+node_modules
+dist
+dev-dist
+*.tsbuildinfo
+.env
+.env.local
+content/generated
+server/data/
+public/content
+__pycache__

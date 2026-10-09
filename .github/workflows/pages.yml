@@ -1,0 +1,52 @@
+# Publishes the site to GitHub Pages on every push to main.
+# Repo settings → Pages → Source: "GitHub Actions" must be selected once.
+# Without a repository variable API_URL the site runs in device-only account mode;
+# set API_URL (e.g. https://evrika-api.onrender.com/api) once a server is hosted.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Build
+        env:
+          # user/organisation sites live at the domain root, project sites under /<repo>/
+          BASE_PATH: ${{ endsWith(github.event.repository.name, '.github.io') && '/' || format('/{0}/', github.event.repository.name) }}
+          VITE_API_URL: ${{ vars.API_URL || 'none' }}
+        run: npm run build
+      - name: SPA fallback for Pages
+        run: cp dist/index.html dist/404.html && touch dist/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
